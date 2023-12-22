@@ -1,0 +1,107 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>単語と意味のクイズ</title>
+    <style>
+        /* ここにCSSを書く */
+    </style>
+</head>
+<body>
+    <h1>単語と意味のクイズ</h1>
+    <div id="quiz">
+        <p id="word">単語: </p>
+        <p><input id="meaning" type="text" placeholder="意味を入力してください"></p>
+        <p id="result"></p>
+        <p id="score">正解数: 0</p>
+        <p id="next"><button id="submit" onclick="checkAnswer()">回答する</button></p>
+    </div>
+    <script>
+        // ここにJavaScriptを書く
+
+        // 単語と意味の辞書をオブジェクトで定義する
+        const words = {
+            "apple": "りんご",
+            "banana": "バナナ",
+            "cat": "ねこ",
+            "dog": "いぬ",
+            "elephant": "ぞう"
+        };
+
+        // 単語のキーを配列にする
+        const keys = Object.keys(words);
+
+        // HTMLの要素を取得する
+        const word = document.getElementById("word");
+        const meaning = document.getElementById("meaning");
+        const result = document.getElementById("result");
+        const score = document.getElementById("score");
+        const next = document.getElementById("next");
+
+        // カウンター変数を初期化する
+        let count = 0;
+        let correct = 0;
+
+        // ランダムに単語を選択する関数を定義する
+        function chooseWord() {
+            // 配列からランダムにインデックスを取得する
+            const index = Math.floor(Math.random() * keys.length);
+            // インデックスに対応するキーを返す
+            return keys[index];
+        }
+
+        // 単語を表示する関数を定義する
+        function showWord() {
+            // ランダムに単語を選択する
+            const key = chooseWord();
+            // 単語を表示する
+            word.textContent = "単語: " + key;
+            // 単語のキーを返す
+            return key;
+        }
+
+        // 現在の単語のキーを格納する変数を定義する
+        let currentKey = showWord();
+
+        // 回答をチェックする関数を定義する
+        function checkAnswer() {
+            // 入力された意味を取得する
+            const input = meaning.value;
+            // 正解の意味を取得する
+            const answer = words[currentKey];
+            // 入力と正解を比較する
+            if (input == answer) {
+                // 正解の場合は○を表示する
+                result.textContent = "○";
+                // 正解数を増やす
+                correct++;
+            } else {
+                // 不正解の場合は☓を表示する
+                result.textContent = "☓";
+            }
+            // 単語とその意味を表示する
+            result.textContent += " 単語: " + currentKey + " 意味: " + answer;
+            // 正解数を表示する
+            score.textContent = "正解数: " + correct;
+            // 入力欄を空にする
+            meaning.value = "";
+            // カウンター変数を更新する
+            count++;
+            // 10回ごとに終了するかどうかを確認する
+            if (count % 10 == 0) {
+                // 続けるかどうかを尋ねる
+                const confirm = window.confirm("続けますか？");
+                if (confirm) {
+                    // 続ける場合は次の単語を表示する
+                    currentKey = showWord();
+                } else {
+                    // 終了する場合は回答ボタンを非表示にする
+                    next.style.display = "none";
+                }
+            } else {
+                // 次の単語を表示する
+                currentKey = showWord();
+            }
+        }
+    </script>
+</body>
+</html>
